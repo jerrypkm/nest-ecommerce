@@ -16,6 +16,11 @@ yarn install
 ```
 docker-compose up -d
 ```
+
+7. Ejecutar seed para reconstruir base de datos
+```
+http://localhost:3000/api/seed
+```
 6. Levantar en modo de desarrollo
 ```
 yarn start:dev
