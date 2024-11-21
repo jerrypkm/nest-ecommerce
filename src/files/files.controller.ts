@@ -8,9 +8,12 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesService } from './files.service';
 
 @Controller('files')
 export class FilesController {
+  constructor(private readonly filesService: FilesService) {}
+
   @Post('product')
   @UseInterceptors(FileInterceptor('file'))
   uploadProductFile(
@@ -19,14 +22,11 @@ export class FilesController {
         validators: [
           new MaxFileSizeValidator({ maxSize: 10000000 }),
           new FileTypeValidator({ fileType: /(jpg|jpeg|png|webp)$/ }),
-          // new FileTypeValidator({ fileType: 'image/png' }),
         ],
       }),
     )
     file: Express.Multer.File,
   ) {
-    return {
-      fileName: file.originalname,
-    };
+    return this.filesService.uploadFile(file);
   }
 }
