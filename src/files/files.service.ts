@@ -12,12 +12,14 @@ export class FilesService {
     @Inject(CloudinaryService)
     private readonly _cloudinaryService: CloudinaryService,
   ) {}
+
   async uploadFile(file: Express.Multer.File) {
     if (!file) throw new BadRequestException('No se encontró un archivo');
     try {
-      await this._cloudinaryService.uploadImage(file);
+      const uploadedImage = await this._cloudinaryService.uploadImage(file);
 
-      return { fileName: file.originalname };
+      const secureUrl = `${uploadedImage.secure_url}`;
+      return { url: secureUrl };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
