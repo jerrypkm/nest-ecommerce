@@ -16,6 +16,8 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Auth, ValidRoles } from 'src/auth';
 import { GetUser } from 'src/auth/decorators';
 import { User } from 'src/auth/entities/user.entity';
+import { ApiResponse } from '@nestjs/swagger';
+import { Product } from './entities';
 
 @Controller('products')
 export class ProductsController {
@@ -23,6 +25,19 @@ export class ProductsController {
 
   @Post()
   @Auth(ValidRoles.admin)
+  @ApiResponse({
+    status: 201,
+    description: 'Product was created',
+    type: Product,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad rerquest',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Token expirated',
+  })
   create(@Body() createProductDto: CreateProductDto, @GetUser() user: User) {
     return this.productsService.create(createProductDto, user);
   }
