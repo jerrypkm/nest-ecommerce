@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AxiosAdapter } from './adapters/fetch.adapter';
+import { AxiosAdapter, CryptAdapter } from './adapters';
+import { PostgresExceptionHandler } from './exceptions/postgres-handler.exception';
 
 @Module({
-  providers: [AxiosAdapter],
-  exports: [AxiosAdapter],
+  providers: [AxiosAdapter, PostgresExceptionHandler, CryptAdapter],
+  exports: [AxiosAdapter, PostgresExceptionHandler, CryptAdapter],
 })
 export class CommonModule {}
