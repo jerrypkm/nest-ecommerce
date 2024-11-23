@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { PostgresExceptionHandler } from 'src/common/exceptions/postgres-handler.exception';
 import { CryptAdapter } from 'src/common/adapters';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { JwtPayload } from './interfaces';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class AuthService {
 
       return {
         ...userData,
-        token: this.getJwt({ email: user.email }),
+        token: this.getJwt({ id: user.id }),
       };
     } catch (error) {
       this.postgresExceptionHandler.handlerDBExceptions(error);
@@ -44,7 +44,7 @@ export class AuthService {
     //Se busca directamente user y password porque password tiene select false
     const user = await this.userRepository.findOne({
       where: { email: email.toLocaleLowerCase() },
-      select: { email: true, password: true },
+      select: { email: true, password: true, id: true },
     });
 
     if (!user) throw new UnauthorizedException('Correo no encontrado');
@@ -53,8 +53,14 @@ export class AuthService {
       throw new UnauthorizedException('La contraseña es incorrecta');
 
     return {
-      ...user,
-      token: this.getJwt({ email: user.email }),
+      email,
+      token: this.getJwt({ id: user.id }),
+    };
+  }
+
+  async checkAuthStatus(id: string) {
+    return {
+      token: this.getJwt({ id: id }),
     };
   }
 

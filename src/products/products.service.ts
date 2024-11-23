@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +6,8 @@ import { DataSource, Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { ProductImage, Product } from './entities';
+import { PostgresExceptionHandler } from 'src/common/exceptions/postgres-handler.exception';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -23,12 +19,13 @@ export class ProductsService {
 
     @InjectRepository(ProductImage)
     private readonly productImageRepository: Repository<ProductImage>,
+    private readonly postgresExceptionHandler: PostgresExceptionHandler,
 
     //Sabe cadena de datos y la misma config que los repositorios para el query runner
     private readonly dataSource: DataSource,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { images = [], ...productDetails } = createProductDto;
 
@@ -37,12 +34,13 @@ export class ProductsService {
         images: images.map((image) =>
           this.productImageRepository.create({ url: image }),
         ),
+        user,
       });
       await this.productRepository.save(product);
 
       return { ...product, images };
     } catch (error) {
-      this.handleDBExceptions(error);
+      this.postgresExceptionHandler.handlerDBExceptions(error);
     }
   }
 
@@ -92,7 +90,7 @@ export class ProductsService {
     return { ...rest, images: images.map((image) => image.url) };
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
     const { images, ...toUpdate } = updateProductDto;
 
     const product = await this.productRepository.preload({
@@ -118,6 +116,7 @@ export class ProductsService {
           this.productImageRepository.create({ url: image }),
         );
       }
+      product.user = user;
       await queryRunner.manager.save(product);
 
       await queryRunner.commitTransaction();
@@ -128,20 +127,13 @@ export class ProductsService {
       console.log(err);
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
-      this.handleDBExceptions(err);
+      this.postgresExceptionHandler.handlerDBExceptions(err);
     }
   }
 
   async remove(id: string) {
     const product = await this.findOne(id);
     await this.productRepository.remove(product);
-  }
-
-  private handleDBExceptions(error: any) {
-    if (error.code === '23505') throw new BadRequestException(error.detail);
-
-    this.logger.error(error);
-    throw new InternalServerErrorException('Unexpected error!');
   }
 
   async deleteAllProducts() {
@@ -151,7 +143,7 @@ export class ProductsService {
       return await query.delete().where({}).execute();
     } catch (err) {
       console.log(err);
-      this.handleDBExceptions(err);
+      this.postgresExceptionHandler.handlerDBExceptions(err);
     }
   }
 }
