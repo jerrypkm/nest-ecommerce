@@ -1,0 +1,327 @@
+{
+	"info": {
+		"_postman_id": "a8831bf6-e3f6-429b-be60-c2461823ffd1",
+		"name": "Nest Ecommerce",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20358576"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One By Term",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/gorra 3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"gorra 3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1MWE1NjMyLTBhY2ItNDBjNS1iNjQ3LTE5NTQyM2NmZDcyYiIsImlhdCI6MTczMjM5Mjc0NCwiZXhwIjoxNzMyMzk5OTQ0fQ.n2AWFTB1ACHE9L94iXAmwUM8oYCkLxY2DSNkPB8T0ag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Patito de goma\",\r\n    \"gender\": \"men\",\r\n    \"sizes\": [\"M\", \"S\", \"G\"],\r\n    \"tags\": [\"Viva\", \"Gorras\", \"Mujeres\"],\r\n    \"images\": [\"image1.jgp\", \"image2.jpg\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/779a2183-5c9a-45da-9986-6ccbb94edb2e",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"779a2183-5c9a-45da-9986-6ccbb94edb2e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Gorra a\",\r\n    \"tags\": [\"Shirts\"],\r\n    \"images\": [\"img1.jpg\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/2f68790a-7469-4869-bd66-b2dd455e00ec",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"2f68790a-7469-4869-bd66-b2dd455e00ec"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload file product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"file\": \"awdawddaw\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/files/product",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"files",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product Image",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/files/product/ba2196d4ecc30accd928e1cdceb1453e",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"files",
+								"product",
+								"ba2196d4ecc30accd928e1cdceb1453e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\": \"Password10!\",\r\n    \"fullName\": \"Sr Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@admin.com\",\r\n    \"password\": \"Password10!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Auth",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNhMzU0NjE4LWMzYWUtNDI2ZC05Yjk5LWZlZWQzZDNlYzk0MiIsImlhdCI6MTczMjM4NzE4MSwiZXhwIjoxNzMyMzk0MzgxfQ.keOgbSB18biT4B-Ywq0hgeCeLEHx2ust93WO0YDONyc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/private",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"private"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3MTc3MzYxLTRhZTgtNGRkMy05NWI2LTI3ZWJlZTU4ZjFkOSIsImlhdCI6MTczMjYzMDM0OCwiZXhwIjoxNzMyNjM3NTQ4fQ.pOXvJo26Rxj-ldF5zmaKTTrmYgZx9Qz1zeLtACg4rp8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/refresh-token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seed",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Test Socket",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/socket.io/socket.io.js",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"socket.io",
+						"socket.io.js"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
